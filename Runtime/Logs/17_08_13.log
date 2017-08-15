@@ -1,0 +1,97 @@
+[ 2017-08-13T09:01:22+08:00 ] 127.0.0.1 /index.php?s=/Admin/Public/login.html
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplace [ RunTime:0.000228s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000440s ]
+INFO: Run Behavior\ParseTemplate [ RunTime:0.056435s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.057619s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCache [ RunTime:0.001008s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.001146s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTrace [ RunTime:0.001641s ]
+INFO: [ app_end ] --END-- [ RunTime:0.001779s ]
+
+[ 2017-08-13T09:01:40+08:00 ] 127.0.0.1 /index.php
+SQL: SHOW COLUMNS FROM `onethink_category` [ RunTime:0.051252s ]
+SQL: SELECT `id`,`name`,`title`,`pid`,`sort`,`list_row`,`meta_title`,`keywords`,`description`,`template_index`,`template_lists`,`template_detail`,`template_edit`,`model`,`type`,`link_id`,`allow_publish`,`display`,`reply`,`check`,`reply_model`,`extend`,`create_time`,`update_time`,`status`,`icon` FROM `onethink_category` WHERE ( `status` = 1 ) ORDER BY sort  [ RunTime:0.017785s ]
+SQL: SHOW COLUMNS FROM `onethink_document` [ RunTime:0.018021s ]
+SQL: SELECT `id`,`uid`,`name`,`title`,`category_id`,`description`,`root`,`pid`,`model_id`,`type`,`position`,`link_id`,`cover_id`,`display`,`deadline`,`attach`,`view`,`comment`,`extend`,`level`,`create_time`,`update_time`,`status` FROM `onethink_document` WHERE ( `status` = 1 ) AND ( `pid` = 0 ) AND ( `create_time` < 1502586098 ) AND ( deadline = 0 OR deadline > 1502586098 ) ORDER BY `id` DESC  [ RunTime:0.002420s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplace [ RunTime:0.000170s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000326s ]
+INFO: Run Behavior\ParseTemplate [ RunTime:0.043185s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.043302s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCache [ RunTime:0.000389s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000471s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTrace [ RunTime:0.000860s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000983s ]
+
+[ 2017-08-13T09:01:43+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/index.html
+SQL: SHOW COLUMNS FROM `onethink_document` [ RunTime:0.004487s ]
+SQL: SELECT d.id,d.title,d.description,d.view,da.path FROM onethink_document d INNER JOIN onethink_picture da  ON d.id = da.id
+   [ RunTime:0.030032s ]
+INFO: [ view_parse ] --START--
+INFO: [ template_filter ] --START--
+INFO: Run Behavior\ContentReplace [ RunTime:0.000055s ]
+INFO: [ template_filter ] --END-- [ RunTime:0.000117s ]
+NOTIC: [8] Undefined variable: document D:\phpStudy\WWW\onethink\Runtime\Cache\Home\b6712068d68b0f23e361fceccafe8f1a.php 第 53 行.
+NOTIC: [8] Undefined variable: channel D:\phpStudy\WWW\onethink\Runtime\Cache\Home\b6712068d68b0f23e361fceccafe8f1a.php 第 54 行.
+NOTIC: [8] Undefined index: create_time D:\phpStudy\WWW\onethink\Runtime\Cache\Home\b6712068d68b0f23e361fceccafe8f1a.php 第 61 行.
+NOTIC: [8] Undefined variable: document D:\phpStudy\WWW\onethink\Runtime\Cache\Home\b6712068d68b0f23e361fceccafe8f1a.php 第 53 行.
+NOTIC: [8] Undefined variable: channel D:\phpStudy\WWW\onethink\Runtime\Cache\Home\b6712068d68b0f23e361fceccafe8f1a.php 第 54 行.
+NOTIC: [8] Undefined index: create_time D:\phpStudy\WWW\onethink\Runtime\Cache\Home\b6712068d68b0f23e361fceccafe8f1a.php 第 61 行.
+NOTIC: [8] Undefined variable: document D:\phpStudy\WWW\onethink\Runtime\Cache\Home\b6712068d68b0f23e361fceccafe8f1a.php 第 53 行.
+NOTIC: [8] Undefined variable: channel D:\phpStudy\WWW\onethink\Runtime\Cache\Home\b6712068d68b0f23e361fceccafe8f1a.php 第 54 行.
+NOTIC: [8] Undefined index: create_time D:\phpStudy\WWW\onethink\Runtime\Cache\Home\b6712068d68b0f23e361fceccafe8f1a.php 第 61 行.
+INFO: Run Behavior\ParseTemplate [ RunTime:0.015460s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.015517s ]
+INFO: [ view_filter ] --START--
+INFO: Run Behavior\WriteHtmlCache [ RunTime:0.000237s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000282s ]
+INFO: [ app_end ] --START--
+INFO: Run Behavior\ShowPageTrace [ RunTime:0.000542s ]
+INFO: [ app_end ] --END-- [ RunTime:0.000590s ]
+
+[ 2017-08-13T09:01:58+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:36+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:38+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:38+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:38+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:39+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:39+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:40+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:40+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:40+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:41+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:41+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
+[ 2017-08-13T10:00:41+08:00 ] 127.0.0.1 /index.php?s=/Home/Notice/detail.html
+ERR: 参数错误或者未定义:id
+
