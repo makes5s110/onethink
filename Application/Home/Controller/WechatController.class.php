@@ -12,6 +12,7 @@ use EasyWeChat\Foundation\Application;
 use EasyWeChat\Menu\Menu;
 use EasyWeChat\Message\News;
 use EasyWeChat\Message\Text;
+use Think\App;
 
 require "./vendor/autoload.php";
 class WechatController extends HomeController
@@ -122,19 +123,73 @@ class WechatController extends HomeController
                 "key" => "news_activity_list"
             ],
             [
-                "name" => "便民服务",
+                "name" => "菜单",
                 "sub_button" => [
                     [
                         "type" => "view",
-                        "name" => "小区通知",
+                        "name" => "便民服务",
                         "url" =>""
                     ],
-                    [],
-                    [],
+                    [
+                        "view" => "view",
+                        "name" => "小区通知",
+                        "url" => ""
+                    ],
+                    [
+                        "view" => "view",
+                        "name" => "在线维修",
+                        "url" => ""
+                    ],
+                    [
+                        "view" => "view",
+                        "name" => "在线维修",
+                        "url" => ""
+                    ],
                 ],
             ],
-            []
+            [
+                "name" => "个人中心",
+                "type" => "view",
+                "url" => ""
+            ]
         ];
+        $menu->add($buttons);
+        //获取已经有的菜单
+        $menus = $menu->all();
+        dump($menus);
+
+    }
+    /**
+     * 发起授权的方法
+     */
+    public static function getAccess()
+    {
+        if(!session('open_id'))
+        {
+            //没有发起授权
+            $app = new Application(C('wechat_config'));
+            $response = $app->oauth->scopes(['snsapi_base'])->redirect();
+            //将请求的路由保存到session中
+            session('request_uri',$_SERVER['PATH_INFO']);
+            $response->send();
+        }
+    }
+    //授权的回调页面  获取用户的open_id
+    public function callback()
+    {
+        $app = new Application(C('wechat_config'));
+        //获取用户信息
+        $user = $app->oauth->user();
+//        $user //可以用的方法
+//        $user->getId(); //对应微信的OPENID
+//        $user->getNickname();//对应微信的nickname
+//        $user->getName();//对应微信的name
+//        $user->getAvatar();//头像网址
+//        $user->getOriginal();//原始API返回的结果
+//        $user->getToken();//access_token,比如共享地址使用
+        //将用户的open_id保存到session中
+        session('open_id',$user->getId());
+        $this->redirect(session('request_uri'));
 
     }
 }
