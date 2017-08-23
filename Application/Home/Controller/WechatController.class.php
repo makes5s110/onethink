@@ -14,7 +14,7 @@ use EasyWeChat\Message\News;
 use EasyWeChat\Message\Text;
 use Think\App;
 
-require "./vendor/autoload.php";
+require "../../../vendor/autoload.php";
 class WechatController extends HomeController
 {
     public function index()
@@ -52,34 +52,71 @@ class WechatController extends HomeController
                     }
                     break;
                 case 'text':
-                    //获取发送的文本信息
+                    //使用对象的方式处理文本消息
                     $content = $message->Content;
                     if($content)
                     {
-                        //多文本消息发送
-                        $new1 = new News([
-                                'title' => '第一个图文消息',//图文消息标题
-                                'description' => '这是第一个图文消息的描述',//图文消息的描述
-                                'url' => 'http://www.baidu.com',//点击图文之后跳转的页面
-                                'image' => 'http://imgsrc.baidu.com/imgad/pic/item/267f9e2f07082838b5168c32b299a9014c08f1f9.jpg'//图文消息中图片的网络地址
-                        ]);
-                        $new2 = new News([
-                            'title' => '第二个图文消息',
-                            'description' => '第二个图文消息的描述',
-                            'url' => 'http://www.qq.com',
-                            'image' => 'http://imgsrc.baidu.com/image/c0%3Dshijue1%2C0%2C0%2C294%2C40/sign=7b4ffe42b919ebc4d4757edaea4fa589/b64543a98226cffc1c697e95b3014a90f603ea52.jpg'
-                        ]);
-                        $new3 = new News([
-                            'title' => '第三个图文消息',
-                            'description' => '第三个图文消息的描述',
-                            'url' => 'http://www.17173.com',
-                            'image' =>'http://img3.utuku.china.com/0x0/mili/20160918/b6a0827a-8d38-4433-bf69-955770c1863c.jpg'
-                        ]);
-                        //发送图文消息
-                        return [$new1,$new2,$new3];
+                        preg_match("/^(\w)(.*)$/",$content,$matches);
+                        switch ($matches[1])
+                        {
+                            case 's':
+                                //基于位置的搜索
+                                $query = urlencode($matches[2]);
+                                //转义
+                            //从数据库中查询出对应open_id的坐标
+                            $user_location = M('location')->where(['open_id'=>$message->FromUserName])->find();
+                            if(empty($user_location))
+                            {
+                                return "请先发送你的位置！";
+                            }
+                            $location = $user_location['x'].','.$user_location['y'];
+                            $search_url = "http://api.map.baidu.com/place/search?query={$query} & location={$location} & radius = 1000 & output = xml";
+                            //解析xml
+                            $simpleXml = simplexml_load_file($search_url);
+
+                            $news = [];
+                            //所有的图文消息
+                            $news_count = 0;
+                            foreach ($simpleXml->results->result as $k=>$v)
+                            {
+                                /**
+                                 * 'title'       => $title,
+                                'description' => '...',
+                                'url'         => $url,
+                                'image'       => $image,
+                                 */
+                                $url = html_entity_decode($v->detail_url);
+                                //将url中的实体符号转换回来
+                                $lng = (string)$v->location->lng;
+                                $lat = (string)$v->location->lat;
+                                //获取百度静态图片
+                                $image_url = "http://api.map.baidu.com/panorama/v2?ak=ryZH80XnumLfI5GQ9e1UAOvgcVH1YrK9&width=512&height=256&location={$lng},{$lat}&fov=180";
+                                $new = new News(['title'=>(string)$v->name,'description'=>(string)$v->address,'url'=>$url,'image'=>$image_url]);
+                                $news[] = $new;
+                                $news_count++;
+                                if($news_count >=8)
+                                {
+                                    break;
+                                }
+                            }
+                            return $news;
+                            break;
+                            case 'l'://搜索天气
+                                $simpleDocument=simplexml_load_file("http://flash.weather.com.cn/wmaps/xml/sichuan.xml");
+                                $weathers=[];
+                                foreach ($simpleDocument as $name=>$value){
+
+                                    $weathers[(string)$value['cityname']]=(string)$value['stateDetailed']."\n".$weathers[(string)$value['tem']]='最低气温:'.$value['tem1'].'最高气温:'.$value['tem2'];
+//                                    $weather['windPower']=(string)$value['windPower'];
+//                                    $weather['time']=(string)$value['time'];
+//                                    $weathers[]=$weather;
+                                }
+                                return $weathers[$matches[2]];
+                                break;
+                        }
                     }else
                     {
-                        $text = new Text(['content' => '这是你访问的文本消息']);
+                        $text = new Text(['content' => '这是你自己发送的文本消息']);
                         return $text;
                     }
                     break;
@@ -93,7 +130,18 @@ class WechatController extends HomeController
                     return '收到视频消息';
                     break;
                 case 'location':
-                    return '收到坐标消息';
+                    /**
+                     * $message->Location_X  地理位置纬度
+                    $message->Location_Y  地理位置经度
+                    $message->Scale       地图缩放大小
+                    $message->Label       地理位置信息
+                     */
+//                    return $message->Location_X.'=='.$message->Location_Y.'='.$message->Scale.'==='.$message->Label;
+                    //将用户的位置信息保存到数据中 添加或更新
+                    $sql = "insert into onethink_location (open_id,x,y,scale,label) values ('{$message->FromUserName}','$message->Location_X','$message->Location_Y',
+'{$message->Scale}','{$message->Label}') ON DUPLICATE KEY UPDATE x='{$message->Location_X}',y='{$message->Location_Y}',scale='{$message->Scale}',label = '{$message->Label}'";
+                    M()->execute($sql);
+                    return $message->Label;
                     break;
                 case 'link':
                     return '收到链接消息';
@@ -142,7 +190,7 @@ class WechatController extends HomeController
                     ],
                     [
                         "view" => "view",
-                        "name" => "在线维修",
+                        "name" => "商家活动",
                         "url" => ""
                     ],
                 ],
